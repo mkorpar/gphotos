@@ -1,7 +1,8 @@
+
 find /data -name "*.tgz" -exec tar -xzf {} -C /data \;
 mv "/data/Takeout/Google Photos/" "/data/photos"
 rm -rf "/data/Takeout/"
-find "/data/photos" -type d ! -path "/data/photos" ! -regex ".* - .*" -exec rm -rf "{}" \;
+find "/data/photos" -type d ! -path "/data/photos" ! -regex ".* - .*" ! -regex ".*/Kazete" -exec rm -rf "{}" \;
 
 find /data/photos -type f -name "*.json" | while read f; do
     img="${f%.*}"
@@ -9,7 +10,7 @@ find /data/photos -type f -name "*.json" | while read f; do
 
         ext="${img##*.}"
         if [ "$ext" != "jpg" ] && [ "$ext" != "JPG" ]; then
-            if [ "$ext" != "mov" ] && [ "$ext" != "MOV" ]; then
+            if [ "$ext" != "mov" ] && [ "$ext" != "MOV" ] && [ "$ext" != "mp4" ] && [ "$ext" != "MP4" ]; then
                 echo "converting: $img"
                 convert "$img" "${img%.*}.jpg"
                 rm -f "$img"
@@ -24,4 +25,4 @@ find /data/photos -type f -name "*.json" | while read f; do
     fi
 done
 
-#find /data/photos -type f -name "*.json" -exec rm -f "{}" \;
+find /data/photos -type f -name "*.json" -exec rm -f "{}" \;
